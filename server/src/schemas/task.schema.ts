@@ -1,7 +1,31 @@
 import { z } from "zod";
 import { normalizeTags } from "../utils/tag-normalizer";
+import { taskPrioritySchema, uuidSchema } from "./utils.schema";
 
 const UUIDSchema = z.string().uuid({ message: "Invalid UUID format." });
+
+export const taskSchema = z
+  .object({
+    id: uuidSchema,
+    workspaceId: uuidSchema,
+    title: z.string().min(1).max(500),
+    completed: z.boolean(),
+    priority: taskPrioritySchema,
+    dueDate: z.string().datetime({ offset: true }).nullable(),
+    tags: z.array(z.string()),
+    createdBy: uuidSchema.nullable(),
+    assignedTo: uuidSchema.nullable(),
+    createdAt: z.string().datetime({ offset: true }),
+    updatedAt: z.string().datetime({ offset: true }),
+  })
+  .strict();
+
+export const taskListResponseSchema = z
+  .object({
+    items: z.array(taskSchema),
+    nextCursor: z.string().nullable(),
+  })
+  .strict();
 
 export const createTaskSchema = z
   .object({
@@ -75,12 +99,9 @@ export const updateTaskSchema = z
       .optional()
       .transform(normalizeTags),
     assignedTo: UUIDSchema.nullable().optional(),
-    updatedAt: z
-      .string()
-      .datetime({
-        message:
-          "updatedAt string is required for optimistic concurrency check.",
-      }),
+    updatedAt: z.string().datetime({
+      message: "updatedAt string is required for optimistic concurrency check.",
+    }),
   })
   .strict()
   .refine(
@@ -105,3 +126,16 @@ export const listTasksQuerySchema = z.object({
     }),
   cursor: z.string().optional(),
 });
+
+export type TaskResponse = z.infer<typeof taskSchema>;
+
+export type CreateTaskInput = z.input<typeof createTaskSchema>;
+export type CreateTaskData = z.output<typeof createTaskSchema>;
+
+export type UpdateTaskInput = z.input<typeof updateTaskSchema>;
+export type UpdateTaskData = z.output<typeof updateTaskSchema>;
+
+export type ListTasksQueryInput = z.input<typeof listTasksQuerySchema>;
+export type ListTasksQuery = z.output<typeof listTasksQuerySchema>;
+
+export type TaskListResponse = z.infer<typeof taskListResponseSchema>;
