@@ -7,6 +7,7 @@ import type {
   UpdateTaskData,
 } from "../schemas/task.schema";
 import { and, eq, gt, ilike } from "drizzle-orm";
+import { Task } from "../types";
 
 /**
  * Creates a task inside a workspace.
@@ -26,7 +27,7 @@ export async function createTask(
   workspaceId: string,
   createdBy: string,
   data: CreateTaskData,
-): Promise<TaskResponse> {
+): Promise<Task> {
   const [task] = await db
     .insert(tasks)
     .values({
