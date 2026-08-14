@@ -24,3 +24,16 @@ export type ErrorCode =
   | "CONFLICT"
   | "RATE_LIMITED"
   | "INTERNAL_ERROR";
+
+export interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+}
+
+export interface PaginatedApiResponse<T> {
+  success: boolean;
+  data: {
+    items: T[];
+    nextCursor: string | null;
+  };
+}
