@@ -8,7 +8,12 @@ const isoTimestampSchema = z.string().datetime({
 });
 
 /** Roles stored in workspace_members.role. */
-export const workspaceRoleSchema = z.enum(["owner", "admin", "editor", "viewer"]);
+export const workspaceRoleSchema = z.enum([
+  "owner",
+  "admin",
+  "editor",
+  "viewer",
+]);
 
 /** Validated input for creating a workspace. */
 export const createWorkspaceSchema = z
@@ -29,10 +34,17 @@ export const createWorkspaceSchema = z
         .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
           message:
             "Slug must contain only lowercase letters, numbers, and single hyphens.",
-        }),
+        })
+        .optional(),
     ),
   })
   .strict();
+/** Validated input for updating a workspace. */
+export const updateWorkspaceSchema = createWorkspaceSchema
+  .partial()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: "At least one field must be provided for update.",
+  });
 
 /** Workspace metadata returned by the workspace endpoints. */
 export const workspaceSchema = z
@@ -78,3 +90,4 @@ export type CreateWorkspaceInput = z.infer<typeof createWorkspaceSchema>;
 export type WorkspaceRole = z.infer<typeof workspaceRoleSchema>;
 export type WorkspaceWithRole = z.infer<typeof workspaceWithRoleSchema>;
 export type WorkspaceMember = z.infer<typeof workspaceMemberSchema>;
+export type UpdateWorkspaceInput = z.infer<typeof updateWorkspaceSchema>;

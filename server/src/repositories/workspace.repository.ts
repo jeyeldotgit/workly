@@ -1,7 +1,12 @@
 import { db } from "../db/drizzle";
-import { workspaceMembers, workspaces } from "../../drizzle/schema";
-import type { CreateWorkspaceInput } from "../schemas/workspace.schema";
+import { users, workspaceMembers, workspaces } from "../../drizzle/schema";
+import type {
+  CreateWorkspaceInput,
+  Workspace,
+  WorkspaceMember,
+} from "../schemas/workspace.schema";
 import { slugify } from "../utils/slugify";
+import { eq } from "drizzle-orm";
 
 /**
  * Creates a workspace and makes the creating user its owner atomically.
@@ -14,10 +19,11 @@ import { slugify } from "../utils/slugify";
 export async function createWorkspace(
   input: CreateWorkspaceInput,
   ownerId: string,
-) {
-  const workspaceSlug = slugify(input.name);
+): Promise<Workspace | undefined> {
+  const workspaceSlug =
+    !input.slug || input.slug.trim() === "" ? slugify(input.name) : input.slug;
 
-  return db.transaction(async (tx) => {
+  const createdWorkspace = await db.transaction(async (tx) => {
     const [workspace] = await tx
       .insert(workspaces)
       .values({
@@ -34,4 +40,31 @@ export async function createWorkspace(
 
     return workspace;
   });
+
+  return {
+    ...createdWorkspace,
+    createdAt: createdWorkspace.createdAt.toISOString(),
+  };
+}
+
+export async function listWorkspaceMembers(
+  workspaceId: string,
+): Promise<WorkspaceMember[] | undefined> {
+  const members = await db
+    .select({
+      userId: users.id,
+      name: users.name,
+      email: users.email,
+      avatarUrl: users.avatarUrl,
+      role: workspaceMembers.role,
+    })
+    .from(workspaceMembers)
+    .innerJoin(users, eq(workspaceMembers.userId, users.id))
+    .where(eq(workspaceMembers.workspaceId, workspaceId));
+
+  if (!members) {
+    throw new Error("Members Not Fetched");
+  }
+
+  return members;
 }
