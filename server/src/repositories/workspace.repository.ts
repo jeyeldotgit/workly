@@ -1,5 +1,5 @@
 import { db } from "../db/drizzle";
-import { users, workspaceMembers, workspaces } from "../../drizzle/schema";
+import { users, workspaceMembers,  workspaces } from "../../drizzle/schema";
 import type {
   CreateWorkspaceInput,
   Workspace,
@@ -47,6 +47,41 @@ export async function createWorkspace(
   };
 }
 
+export async function listWorkspaces(userId: string): Promise<Workspace[] | undefined> {
+      const userWorkspaces = await db
+        .select({
+          id: workspaces.id,
+          name: workspaces.name,
+          slug: workspaces.slug,
+          createdAt: workspaces.createdAt, 
+      })
+        .from(workspaces)
+        .innerJoin(workspaceMembers, eq(workspaces.id, workspaceMembers.workspaceId))
+        .innerJoin(users, eq(workspaceMembers.userId, users.id))
+        .where(eq(users.id, userId))
+
+      if(!userWorkspaces) {
+        throw new Error("Error Fetching User Workspaces")
+      }
+
+      const returnedData = userWorkspaces.map(w => ({
+        ...w,
+        createdAt: w.createdAt.toISOString()
+      }))
+
+      return returnedData
+}
+
+
+export async function deleteWorkspace(workspaceId: string) {
+  const [deletedWorkspace] = await db
+    .delete(workspaces)
+    .where(eq(workspaces.id, workspaceId))
+    .returning()
+
+  return deletedWorkspace.id;
+}
+
 export async function listWorkspaceMembers(
   workspaceId: string,
 ): Promise<WorkspaceMember[] | undefined> {
@@ -68,3 +103,18 @@ export async function listWorkspaceMembers(
 
   return members;
 }
+
+
+
+
+async function run() {
+  try {
+    const workspaces = await listWorkspaces("30dae323-cce2-4570-a1c0-b80b5d9bc845");
+
+    console.log(workspaces);
+  } catch (error) {
+    console.error("Failed to delete workspace:", error);
+  }
+}
+
+run();
