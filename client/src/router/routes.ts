@@ -2,8 +2,8 @@ export const ROUTES = {
   LANDING: "/",
   LOGIN: "/login",
   WORKSPACES: "/workspaces",
-  WORKSPACES_ID: "/workspaces/123", // Fix this when wired with the API 
-  TASKS: "/workspaces/task", // must be :workspaceId/slug/tasks
+  WORKSPACES_ID: "/workspaces/home", // Fix this when wired with the API
+  TASKS: "/workspaces/tasks", // must be :workspaceId/slug/tasks
   KANBAN: "/workspaces/kanban",
   TEAM: "/workspaces/team",
   REGISTER: "/register",

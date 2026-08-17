@@ -1,26 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import Sidebar from '../components/Sidebar';
-import Header from '../components/Header';
-import MobileNav from '../components/MobileNav';
-import { GlobalCommandPalette } from '../features/CommandPalletes/CommandPaletteModal';
+import { useState, useEffect } from "react";
+import Sidebar from "../components/Sidebar";
+import Header from "../components/Header";
+import MobileNav from "../components/MobileNav";
+import { GlobalCommandPalette } from "../features/CommandPalletes/CommandPaletteModal";
+import { Outlet } from "react-router";
 
-interface DashboardLayoutProps {
-  children: React.ReactNode;
-}
-
-export default function DashboardLayout({ children }: DashboardLayoutProps) {
+export default function DashboardLayout() {
   const [isCmdOpen, setIsCmdOpen] = useState(false);
 
   // Global shortcut listener for Command Palette (⌘K)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         setIsCmdOpen((prev) => !prev);
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   return (
@@ -35,7 +32,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
         {/* Page Main Content */}
         <main className="flex-1 overflow-y-auto overflow-x-hidden bg-[#090D16] relative flex flex-col">
-          {children}
+          <Outlet />
         </main>
       </div>
 

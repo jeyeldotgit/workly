@@ -1,23 +1,26 @@
-import { 
-  LayoutDashboard, 
-  FolderKanban, 
-  CheckSquare, 
-  FileText, 
-  BarChart3, 
-  Users, 
-  HelpCircle, 
-  Layers 
-} from 'lucide-react';
-import { NavLink } from 'react-router';
+import {
+  LayoutDashboard,
+  FolderKanban,
+  CheckSquare,
+  FileText,
+  Users,
+  HelpCircle,
+  Layers,
+} from "lucide-react";
+import { NavLink } from "react-router";
 
 export default function Sidebar() {
   const navItems = [
-    { label: 'Home', icon: LayoutDashboard, href: '#', active: true },
-    { label: 'Projects', icon: FolderKanban, href: '#' },
-    { label: 'Tasks', icon: CheckSquare, href: '#' },
-    { label: 'Documents', icon: FileText, href: '#' },
-    { label: 'Analytics', icon: BarChart3, href: '#' },
-    { label: 'Team', icon: Users, href: '#' },
+    {
+      label: "Home",
+      icon: LayoutDashboard,
+      to: "/workspaces/home",
+      active: true,
+    },
+    { label: "Kanban", icon: FolderKanban, to: "/workspaces/kanban" },
+    { label: "Tasks", icon: CheckSquare, to: "/workspaces/tasks" },
+    { label: "Documents", icon: FileText, to: "/workspaces/documents" },
+    { label: "Team", icon: Users, to: "/workspaces/team" },
   ];
 
   return (
@@ -31,10 +34,8 @@ export default function Sidebar() {
           <h2 className="text-sm font-bold text-[#e2e2e8] tracking-tight">
             Acme Workspace
           </h2>
-
         </div>
       </div>
-
 
       {/* Dynamic Navigation Links */}
       <nav className="flex-1 px-3 flex flex-col gap-1">
@@ -43,12 +44,15 @@ export default function Sidebar() {
           return (
             <NavLink
               key={item.label}
-              to={item.href}
-              className={`flex items-center gap-3 px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                item.active
-                  ? 'bg-[#6366F1]/10 text-[#b0c6ff] border-l-2 border-[#6366F1]'
-                  : 'text-[#c2c6d7] hover:bg-[#333539]/50'
-              }`}
+              to={item.to}
+              // callback function to extract isActive dynamically
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                  isActive
+                    ? "bg-[#6366F1]/10 text-[#b0c6ff] border-l-2 border-[#6366F1]"
+                    : "text-[#c2c6d7] hover:bg-[#333539]/50"
+                }`
+              }
             >
               <Icon className="w-4 h-4" />
               {item.label}
