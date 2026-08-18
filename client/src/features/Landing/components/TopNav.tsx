@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import HorizantalIcon from "../../../assets/horizontal-transparent-darkUI.png";
+import HorizantalIcon from "../../../assets/horizontal-transparent-darkUI@2x.png";
 
 function TopNav() {
   const navigate = useNavigate();

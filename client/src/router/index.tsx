@@ -40,14 +40,14 @@ const router = createBrowserRouter([
     loader: pokemonLoader(queryClient),
   },
   {
+    path: ROUTES.WORKSPACES,
+    element: <WorkspaceSelectionPage />,
+    // loader: put a tanstack query here after
+  },
+  {
     path: "/",
     element: <DashboardLayout />,
     children: [
-      {
-        path: ROUTES.WORKSPACES,
-        element: <WorkspaceSelectionPage />,
-        // loader: put a tanstack query here after
-      },
       {
         path: ROUTES.WORKSPACES_ID,
         element: <WorkspacePage />,

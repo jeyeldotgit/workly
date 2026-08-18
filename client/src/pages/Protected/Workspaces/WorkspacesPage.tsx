@@ -18,7 +18,7 @@ export default function WorkspacePage() {
           <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight">
             Welcome to{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366F1] to-[#b0c6ff]">
-              Engineering
+              Workly
             </span>
           </h1>
           <p className="text-sm md:text-base text-[#c2c6d7] max-w-lg mx-auto">

@@ -1,5 +1,4 @@
-import React from 'react';
-import { Menu, Search, Bell, Settings } from 'lucide-react';
+import { Menu, Search, Bell, Settings } from "lucide-react";
 
 interface HeaderProps {
   onOpenSearch: () => void;
@@ -15,18 +14,28 @@ export default function Header({ onOpenSearch }: HeaderProps) {
 
         {/* Breadcrumb Context */}
         <div className="text-sm font-bold text-[#b0c6ff] tracking-tight hidden md:block">
-          Workly <span className="text-[#424654] font-normal mx-1">/</span> Engineering
+          Workly <span className="text-[#424654] font-normal mx-1">/</span>{" "}
+          Engineering
         </div>
 
         {/* Top Links */}
         <nav className="hidden md:flex gap-1">
-          <a href="#" className="px-3 py-1.5 rounded-md text-[#c2c6d7] hover:bg-[#1a1c20] transition-colors text-xs font-medium">
+          <a
+            href="#"
+            className="px-3 py-1.5 rounded-md text-[#c2c6d7] hover:bg-[#1a1c20] transition-colors text-xs font-medium"
+          >
             Projects
           </a>
-          <a href="#" className="px-3 py-1.5 rounded-md text-[#c2c6d7] hover:bg-[#1a1c20] transition-colors text-xs font-medium">
+          <a
+            href="#"
+            className="px-3 py-1.5 rounded-md text-[#c2c6d7] hover:bg-[#1a1c20] transition-colors text-xs font-medium"
+          >
             Vault
           </a>
-          <a href="#" className="px-3 py-1.5 rounded-md text-[#c2c6d7] hover:bg-[#1a1c20] transition-colors text-xs font-medium">
+          <a
+            href="#"
+            className="px-3 py-1.5 rounded-md text-[#c2c6d7] hover:bg-[#1a1c20] transition-colors text-xs font-medium"
+          >
             Insights
           </a>
         </nav>
